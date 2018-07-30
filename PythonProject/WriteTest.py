@@ -21,6 +21,8 @@ class Window(QtGui.QMainWindow):
         self.name = None
         self.file = 0
         self.direct = 0
+        self.classList = [None]
+        
         self.home()
 
     def home(self):
@@ -28,6 +30,20 @@ class Window(QtGui.QMainWindow):
         folderOpen.triggered.connect(self.folder_open)
         self.toolBar = self.addToolBar("Open")
         self.toolBar.addAction(folderOpen)
+
+        self.line_edit = QtGui.QLineEdit()
+        #self.line_edit.editingFinished.connect(self.addList)
+
+        label = QtGui.QLabel('Press the ENTER key to finish editing.')
+        label.setTextFormat(Qt.PlainText)
+
+        self.toolBar.addWidget(self.line_edit)  
+        self.toolBar.addWidget(label)
+
+        Analyse = QtGui.QAction(QtGui.QIcon('Analysis.png'),'Analyse',self)
+        Analyse.triggered.connect(self.addList)
+        self.toolBar = self.addToolBar("Analyse")
+        self.toolBar.addAction(Analyse)
         
         self.show()
 
@@ -68,6 +84,14 @@ class Window(QtGui.QMainWindow):
     def paint_image(self,image):
         self.imgLabel.setPixmap(QtGui.QPixmap.fromImage(image))
         self.imgLabel.setAlignment(QtCore.Qt.AlignCenter|QtCore.Qt.AlignVCenter)
+        
+    def addList(self):
+        if(self.line_edit.text()not in self.classList):
+            if(self.classList[0] == None):
+                self.classList[0] = self.line_edit.text()
+            else:
+                self.classList.append(self.line_edit.text())
+        print(self.classList)
         
 def run():
     app = QtGui.QApplication(sys.argv)
